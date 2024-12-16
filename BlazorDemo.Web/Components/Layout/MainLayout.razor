@@ -1,0 +1,29 @@
+﻿@inherits LayoutComponentBase
+
+<header class="top-bar">
+    <a class="logo" href="/">
+        <img src="img/logo.svg" />
+    </a>
+
+    <NavLink href="/" class="nav-tab" Match="NavLinkMatch.All">
+        <img src="img/pizza-slice.svg" />
+        <div>Get Pizza</div>
+    </NavLink>
+
+    <NavLink href="myorders" class="nav-tab">
+        <img src="img/bike.svg" />
+        <div>My Orders</div>
+    </NavLink>
+</header>
+
+<article class="content">
+    @Body
+</article>
+
+<footer>&copy; Blazor Demo @DateTime.UtcNow.Year</footer>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>

@@ -1,0 +1,94 @@
+﻿@page "/myorders/{orderId:int}"
+@rendermode InteractiveServer
+
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+@implements IDisposable
+
+@if (invalidOrder)
+{
+    <h2>Order not found.</h2>
+    <p>Sorry, but this order does not exist.</p>
+}
+else if (orderWithStatus == null)
+{
+    <div class="track-order">
+        <div class="track-order-title">
+            <h2>
+                <text>Loading...</text>
+            </h2>
+            <p class="mx-auto mb-0">...</p>
+        </div>
+    </div>
+}
+else
+{
+    <div class="track-order">
+        <div class="track-order-title">
+            <h2>Order placed @orderWithStatus.Order.CreatedTime.ToLongDateString()</h2>
+            <p class="mb-0">
+                Status: <strong>@orderWithStatus.StatusText</strong>
+            </p>
+        </div>
+        <div class="track-order-body">
+            <div class="track-order-details">
+                <div class="item-rows">
+                    @foreach (var pizza in orderWithStatus.Order.Pizzas)
+                    {
+                        <p>
+                            <strong>
+                                @(pizza.Size)"
+                                @pizza.Special?.Name
+                                ($@pizza.GetFormattedTotalPrice())
+                            </strong>
+                        </p>
+                    }
+                </div>
+
+                @if (IsOrderIncomplete)
+                {
+                    <div class="spinner-grow text-danger float-right" role="status" />
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int OrderId { get; set; }
+
+    private bool IsOrderIncomplete => orderWithStatus is null || orderWithStatus.IsDelivered == false;
+    private PeriodicTimer timer = new(TimeSpan.FromSeconds(3));
+    private OrderWithStatus? orderWithStatus;
+    private bool invalidOrder = false;
+
+    protected override async Task OnParametersSetAsync() => await GetLatestOrderStatusUpdateAsync();
+
+    protected override Task OnAfterRenderAsync(bool firstRender) => firstRender ? StartPollingAsync() : Task.CompletedTask;
+
+    protected async Task GetLatestOrderStatusUpdateAsync()
+    {
+        try
+        {
+            orderWithStatus = await HttpClient.GetFromJsonAsync<OrderWithStatus>($"{NavigationManager.BaseUri}orders/{OrderId}") ?? null;
+        }
+        catch (Exception)
+        {
+            invalidOrder = true;
+        }
+    }
+
+    private async Task StartPollingAsync()
+    {
+        while (IsOrderIncomplete && await timer.WaitForNextTickAsync())
+        {
+            await GetLatestOrderStatusUpdateAsync();
+
+            StateHasChanged();
+        }
+    }
+
+    public void Dispose() => timer.Dispose();
+}

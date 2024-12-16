@@ -1,0 +1,53 @@
+﻿@inject HttpClient HttpClient
+
+<div class="dialog-container">
+    <div class="dialog">
+        <div class="dialog-title">
+            <h2>@Pizza.Special?.Name</h2>
+            @Pizza.Special?.Description
+        </div>
+        <form class="dialog-body">
+            <div>
+                @if (supportSizing)
+                {
+                    <label>Size:</label>
+                    <input type="range" min="@Pizza.MinimumSize" max="@Pizza.MaximumSize" step="1" @bind="Pizza.Size" @bind:event="oninput" />
+                }
+
+                <span class="size-label">
+                    @(Pizza.Size)" ($@(Pizza.GetFormattedTotalPrice()))
+                </span>
+            </div>
+        </form>
+        <div class="dialog-buttons">
+            <button @onclick="OnCancel" class="btn btn-secondary ml-auto">Cancel</button>
+            <span class="mx-auto">
+                Price: <span class="price">@(Pizza.GetFormattedTotalPrice())</span>
+            </span>
+            <button @onclick="OnConfirm" class="btn btn-success mr-auto">Order</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public required Pizza Pizza { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    [Parameter]
+    public EventCallback OnConfirm { get; set; }
+
+    private bool supportSizing = true;
+
+    protected override void OnInitialized()
+    {
+        if (Pizza is { Special.FixedSize: not null })
+        {
+            Pizza.Size = Pizza.Special.FixedSize.Value;
+
+            supportSizing = false;
+        }
+    }
+}

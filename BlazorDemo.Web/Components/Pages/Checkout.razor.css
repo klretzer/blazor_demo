@@ -1,0 +1,40 @@
+﻿.checkout-container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    flex: .55;
+}
+
+.checkout-cols {
+    margin: auto;
+    flex-direction: row;
+    display: flex;
+}
+
+    .checkout-cols h4 {
+        margin-bottom: 1.5rem;
+    }
+
+    .checkout-cols > div {
+        border: 1px solid #ddd;
+        background: rgba(255,255,255,0.3);
+        padding: 1.25rem;
+        overflow-y: auto;
+        flex: 1;
+    }
+
+        .checkout-cols > div:first-child {
+            margin-right: .5rem;
+        }
+
+        .checkout-cols > div:last-child {
+            margin-left: .5rem;
+        }
+
+.checkout-button {
+    margin: 1rem auto;
+    font-weight: 700;
+    border-radius: 20px;
+    padding: 0.4rem 1.2rem;
+    display: flex;
+}

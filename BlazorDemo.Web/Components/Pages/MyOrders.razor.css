@@ -1,0 +1,74 @@
+﻿div.no-orders {
+    display: flex;
+    flex-direction: column;
+    margin: 5rem auto;
+}
+
+    a.order-btn {
+        margin-top: 2rem;
+        font-weight: bold;
+    }
+
+.order-header {
+    padding: 1rem;
+    border: 1px solid rgba(0,0,0,.125);
+    height: 7rem;
+    display: flex;
+}
+
+.order-header .details-btn {
+    align-content: center;
+}
+
+.orders-container {
+    margin: 3rem auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    max-height: calc(100% - 6rem);
+}
+
+.orders-container ::deep .container-sm {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100% - 7rem);
+}
+
+.order-list {
+    overflow-y: auto;
+    display: flex;
+}
+
+.order-list .list-group-item {
+    display: flex;
+}
+
+.order-list .col {
+    margin: auto;
+}
+
+.orders-list h5 {
+    color: #c03939;
+    font-size: 1.3rem;
+    font-weight: 300;
+    margin: 0.2rem 0 0 0;
+    font-family: 'Bahnschrift', Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+}
+
+::deep nav {
+    display: flex;
+    overflow-x: auto;
+    margin: 0 auto;
+    max-width: 100%;
+}
+
+::deep nav a {
+    cursor: pointer;
+}
+
+    ::deep nav > ul {
+        margin-bottom: 0;
+    }
